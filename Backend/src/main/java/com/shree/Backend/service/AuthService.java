@@ -61,17 +61,36 @@ public class AuthService {
     private void sendVerificationEmail(User user) {
         try{
             String link = appUrl + "/api/auth/verify-email?token="+user.getVerificationToken();
-            String html = "<div style='font-family:sans-serif'>" +
-                    "<h2>Verify your email</h2>" +
-                    "<p>Hi " + user.getName() + ", please confirm your email to activate your account.</p>" +
-                    "<p>" +
-                    "<a href='" + link + "' " +
-                    "style='display:inline-block;padding:10px 16px;background:#6366f1;color:#fff;border-radius:6px;text-decoration:none;'>"
-                    + "Verify Email</a>" +
-                    "</p>" +
-                    "<p>Or copy this link:" + link + "</p>" +
-                    "<p>This link expires in 24 hours.</p>" +
-                    "</div>";
+            String html =
+                    "<div style='font-family:Arial, sans-serif; background:#f4f6fb; padding:30px;'>" +
+
+                            "<div style='max-width:500px; margin:auto; background:#ffffff; border-radius:12px; " +
+                            "box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:30px; text-align:center;'>" +
+
+                            "<h2 style='color:#333; margin-bottom:10px;'>Verify Your Email</h2>" +
+
+                            "<p style='color:#555; font-size:15px;'>Hi <b>" + user.getName() + "</b>,</p>" +
+                            "<p style='color:#666; font-size:14px; line-height:1.6;'>Thanks for signing up! " +
+                            "Please confirm your email address to activate your account.</p>" +
+
+                            "<a href='" + link + "' " +
+                            "style='display:inline-block; margin-top:20px; padding:12px 20px; " +
+                            "background:linear-gradient(135deg,#6366f1,#4f46e5); color:#ffffff; " +
+                            "text-decoration:none; font-weight:bold; border-radius:8px; font-size:14px;'>"
+                            + "Verify Email</a>" +
+
+                            "<p style='margin-top:25px; font-size:13px; color:#888;'>Or copy and paste this link:</p>" +
+
+                            "<p style='word-break:break-all; font-size:12px; color:#4f46e5;'>" + link + "</p>" +
+
+                            "<hr style='margin:25px 0; border:none; border-top:1px solid #eee;'/>" +
+
+                            "<p style='font-size:12px; color:#999;'>This link will expire in <b>24 hours</b>.</p>" +
+
+                            "<p style='font-size:11px; color:#bbb;'>If you didn’t request this, you can safely ignore this email.</p>" +
+
+                            "</div>" +
+                            "</div>";;
             emailService.sendHtmlEmail(user.getEmail(),"verify your email ", html );
 
         }catch (Exception e){
