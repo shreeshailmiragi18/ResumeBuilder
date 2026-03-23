@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.shree.Backend.util.AppConstants.*;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping(AUTH_CONTROLLER) // AUTH_CONTROLLER is a constant with the endpoint /api/auth
 @Slf4j
 public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping(REGISTER)
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request){
         log.info("inside the AuthController: register() {}",request);
             AuthResponse response = authService.register(request);
@@ -28,7 +30,7 @@ public class AuthController {
 
     }
 
-    @GetMapping("verify-email")
+    @GetMapping(VERIFY_EMAIL)
     public ResponseEntity<?> verifyEmail(@RequestParam String token){
         log.info("inside the AuthController: verifyEmail() {}",token);
         authService.verifyEmail(token);
