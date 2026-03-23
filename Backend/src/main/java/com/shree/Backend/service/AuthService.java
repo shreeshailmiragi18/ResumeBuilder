@@ -22,7 +22,7 @@ public class AuthService {
     private final EmailService emailService;
 
 
-    @Value("${app.base,url:http://localhost:8080 }")
+    @Value("${app.base,url:http://localhost:8080}")
     private String appUrl;
 
     public AuthResponse register(RegisterRequest request) {
@@ -96,5 +96,18 @@ public class AuthService {
         }catch (Exception e){
             throw new RuntimeException("Failed to send verification email: "+e.getMessage());
         }
+    }
+
+    public void verifyEmail(String token){
+       User user =  userRepository.findByVerificationToken(token).orElseThrow(()-> new RuntimeException("Invalid or expired verification token"));
+
+       if(user.getVerificationExpires() != null && user.getVerificationExpires().isBefore(LocalDateTime.now())){
+           throw new RuntimeException("expired verification token");
+       }
+
+       user.setEmailVerified(true);
+       user.setVerificationToken(null);
+       user.setVerificationExpires(null);
+       userRepository.save(user);
     }
 }
