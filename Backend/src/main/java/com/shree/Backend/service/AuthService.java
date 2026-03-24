@@ -2,12 +2,16 @@ package com.shree.Backend.service;
 
 import com.shree.Backend.documents.User;
 import com.shree.Backend.dto.AuthResponse;
+import com.shree.Backend.dto.LoginRequest;
 import com.shree.Backend.dto.RegisterRequest;
 import com.shree.Backend.exceptions.ResourceExistsException;
 import com.shree.Backend.repository.UserRepository;
+import com.shree.Backend.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +24,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
+    private final JWTUtil jwtUtil;
 
 
     @Value("${app.base,url:http://localhost:8080}")
@@ -35,7 +41,7 @@ public class AuthService {
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .profileImageUrl(request.getProfileImageUrl())
                 .subscriptionPlan("Basic")
                 .emailVerified(false)
@@ -126,6 +132,32 @@ public class AuthService {
 
         sendVerificationEmail(user);
 
+    public AuthResponse login(LoginRequest request){
+        User existingUser = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RuntimeException("Invalid email"));
+
+        if(!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())){
+            throw new UsernameNotFoundException("Invalid email or password");
+        }
+
+        if(!existingUser.isEmailVerified()){
+            throw new RuntimeException(existingUser.getEmail() + " is not verified   please verify the email");
+        }
+
+        String token = jwtUtil.generateToken(existingUser.getId());
+
+        AuthResponse response = AuthResponse.builder()
+                .id(existingUser.getId())
+                .name(existingUser.getName())
+                .email(existingUser.getEmail())
+                .profileImageUrl(existingUser.getProfileImageUrl())
+                .subscriptionPlan(existingUser.getSubscriptionPlan())
+                .emailVerified(existingUser.isEmailVerified())
+                .createdAt(existingUser.getCreatedAt())
+                .updatedAt(existingUser.getUpdatedAt())
+                .build();
+
+        response.setToken(token);
+        return response;
 
 
     }

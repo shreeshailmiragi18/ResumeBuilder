@@ -1,19 +1,24 @@
 package com.shree.Backend.controller;
 
 import com.shree.Backend.dto.AuthResponse;
+import com.shree.Backend.dto.LoginRequest;
 import com.shree.Backend.dto.RegisterRequest;
 import com.shree.Backend.service.AuthService;
+import com.shree.Backend.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
 import static com.shree.Backend.util.AppConstants.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ import static com.shree.Backend.util.AppConstants.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping(REGISTER)
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request){
@@ -53,4 +59,22 @@ public class AuthController {
         return ResponseEntity.ok().body(Map.of("success", true, "message","verification email sent"));
 
     }
+    @PostMapping(FILE_UPLOAD)
+    public ResponseEntity<?> uploadImage(@RequestParam("image" )MultipartFile file) throws IOException {
+         Map<String,String> response = fileUploadService.uploadSingleImage(file);
+         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping(LOGIN)
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
+        AuthResponse response = authService.login(request);
+        return ResponseEntity.ok().body(response);
+    }
+
+     // for testing jwt validation
+//    @GetMapping("/validate")
+//    public String testValidationToken(){
+//        return "token is valid";
+//    }
+
 }
