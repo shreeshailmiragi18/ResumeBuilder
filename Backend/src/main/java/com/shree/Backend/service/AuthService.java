@@ -110,4 +110,23 @@ public class AuthService {
        user.setVerificationExpires(null);
        userRepository.save(user);
     }
+
+    public void resendVerification(String email) {
+
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("user not found"));
+
+        if(user.isEmailVerified()){
+            throw new RuntimeException("email already verified");
+        }
+
+        user.setVerificationToken(UUID.randomUUID().toString());
+        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
+
+        userRepository.save(user);
+
+        sendVerificationEmail(user);
+
+
+
+    }
 }
