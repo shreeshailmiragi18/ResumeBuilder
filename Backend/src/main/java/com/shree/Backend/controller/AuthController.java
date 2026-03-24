@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static com.shree.Backend.util.AppConstants.*;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(AUTH_CONTROLLER) // AUTH_CONTROLLER is a constant with the endpoint /api/auth
@@ -53,5 +54,11 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok().body(response);
     }
+
+     // for testing jwt validation
+//    @GetMapping("/validate")
+//    public String testValidationToken(){
+//        return "token is valid";
+//    }
 
 }
