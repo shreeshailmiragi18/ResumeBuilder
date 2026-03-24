@@ -6,6 +6,7 @@ import com.shree.Backend.dto.LoginRequest;
 import com.shree.Backend.dto.RegisterRequest;
 import com.shree.Backend.exceptions.ResourceExistsException;
 import com.shree.Backend.repository.UserRepository;
+import com.shree.Backend.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final JWTUtil jwtUtil;
 
 
     @Value("${app.base,url:http://localhost:8080}")
@@ -126,7 +128,7 @@ public class AuthService {
             throw new RuntimeException(existingUser.getEmail() + " is not verified   please verify the email");
         }
 
-        String token = "jwttoken";
+        String token = jwtUtil.generateToken(existingUser.getId());
 
         AuthResponse response = AuthResponse.builder()
                 .id(existingUser.getId())
