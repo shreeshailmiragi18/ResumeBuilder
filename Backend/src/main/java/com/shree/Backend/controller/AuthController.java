@@ -1,6 +1,7 @@
 package com.shree.Backend.controller;
 
 import com.shree.Backend.dto.AuthResponse;
+import com.shree.Backend.dto.LoginRequest;
 import com.shree.Backend.dto.RegisterRequest;
 import com.shree.Backend.service.AuthService;
 import com.shree.Backend.service.FileUploadService;
@@ -45,6 +46,12 @@ public class AuthController {
     public ResponseEntity<?> uploadImage(@RequestParam("image" )MultipartFile file) throws IOException {
          Map<String,String> response = fileUploadService.uploadSingleImage(file);
          return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping(LOGIN)
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
+        AuthResponse response = authService.login(request);
+        return ResponseEntity.ok().body(response);
     }
 
 }
