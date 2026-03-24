@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.shree.Backend.util.AppConstants.*;
 
@@ -43,6 +44,21 @@ public class AuthController {
         return ResponseEntity.ok().body(Map.of("message","email verified"));
     }
 
+    @PostMapping(RESEND_VERIFICATION)
+    public ResponseEntity<?> resendVerification(@RequestBody Map<String,String> body){
+        log.info("inside the AuthController: resendVerification() {}",body);
+
+        String email = body.get("email");
+
+        if(Objects.isNull(email)){
+            return ResponseEntity.badRequest().body("email is null, email is required");
+        }
+
+        authService.resendVerification(email);
+
+        return ResponseEntity.ok().body(Map.of("success", true, "message","verification email sent"));
+
+    }
     @PostMapping(FILE_UPLOAD)
     public ResponseEntity<?> uploadImage(@RequestParam("image" )MultipartFile file) throws IOException {
          Map<String,String> response = fileUploadService.uploadSingleImage(file);
