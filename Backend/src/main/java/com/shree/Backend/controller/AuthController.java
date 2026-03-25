@@ -1,5 +1,6 @@
 package com.shree.Backend.controller;
 
+import com.shree.Backend.documents.User;
 import com.shree.Backend.dto.AuthResponse;
 import com.shree.Backend.dto.LoginRequest;
 import com.shree.Backend.dto.RegisterRequest;
@@ -10,11 +11,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.lang.Object;
 import java.util.Objects;
 
 import static com.shree.Backend.util.AppConstants.*;
@@ -70,6 +73,15 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping(PROFILE)
+    public ResponseEntity<?> getProfile(Authentication authentication){
+       Object principalObject  = authentication.getPrincipal();
+
+       AuthResponse currentProfile = authService.getProfile(principalObject);
+       return ResponseEntity.ok().body(currentProfile);
+    }
+
 
      // for testing jwt validation
 //    @GetMapping("/validate")
