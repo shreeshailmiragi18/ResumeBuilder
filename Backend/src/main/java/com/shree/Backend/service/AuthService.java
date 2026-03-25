@@ -119,9 +119,9 @@ public class AuthService {
 
     public void resendVerification(String email) {
 
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("user not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
 
-        if(user.isEmailVerified()){
+        if (user.isEmailVerified()) {
             throw new RuntimeException("email already verified");
         }
 
@@ -131,6 +131,7 @@ public class AuthService {
         userRepository.save(user);
 
         sendVerificationEmail(user);
+    }
 
     public AuthResponse login(LoginRequest request){
         User existingUser = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RuntimeException("Invalid email"));
@@ -158,7 +159,5 @@ public class AuthService {
 
         response.setToken(token);
         return response;
-
-
     }
 }
