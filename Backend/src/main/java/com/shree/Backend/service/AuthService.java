@@ -160,4 +160,22 @@ public class AuthService {
         response.setToken(token);
         return response;
     }
+
+    public AuthResponse getProfile(Object principalObject) {
+        String getUserId = (String)principalObject;
+        User getUser = userRepository.findById(getUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println("inside get profile");
+        return AuthResponse.builder()
+                .id(getUser.getId())
+                .name(getUser.getName())
+                .email(getUser.getEmail())
+                .profileImageUrl(getUser.getProfileImageUrl())
+                .subscriptionPlan(getUser.getSubscriptionPlan())
+                .emailVerified(getUser.isEmailVerified())
+                .createdAt(getUser.getCreatedAt())
+                .updatedAt(getUser.getUpdatedAt())
+                .build();
+    }
+
 }
