@@ -9,4 +9,11 @@ public class AppConstants {
     public static final String FILE_UPLOAD = "/upload-image";
     public static final String LOGIN = "/login";
     public static final String PROFILE = "/profile";
+
+    //Resume related endpoints
+
+    public static final String ID = "/{id}";
+    public static final String UPLOAD_IMAGES = "/{id}/upload-images";
+
+
 }

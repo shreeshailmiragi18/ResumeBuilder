@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.info.SslInfo;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,7 +36,7 @@ public class Resume {
 
     private ContactInfo contactInfo;
 
-    private List<workExperienceInfo> workExperienceInfo;
+    private List<WorkExperienceInfo> workExperienceInfo;
 
     private List<EducationInfo> educationInfo;
 
@@ -64,7 +63,7 @@ public class Resume {
     @NoArgsConstructor
     public static class Template{
         private String theme;
-        private List<String> colorPallet;
+        private List<String> colorPalette;
     }
 
     @Data
@@ -95,7 +94,7 @@ public class Resume {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class workExperienceInfo{
+    public static class WorkExperienceInfo{
         private String company;
         private String role;
         private String startDate;
