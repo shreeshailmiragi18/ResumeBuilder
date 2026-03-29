@@ -59,4 +59,26 @@ public class ResumeService {
                 .orElseThrow(()-> new RuntimeException("Resume not found"));
         return existingResume;
     }
+
+    public Resume updateResume(String resumeId, Resume updateData,  Object principal) {
+        AuthResponse response = authService.getProfile(principal);
+        Resume existingResume = resumeRepository.findByUserIdAndId(response.getId(), resumeId)
+                .orElseThrow(()-> new RuntimeException("Resume not found"));
+        existingResume.setTitle(updateData.getTitle());
+        existingResume.setThumbnailLink(updateData.getThumbnailLink());
+        existingResume.setTemplate(updateData.getTemplate());
+        existingResume.setProfileInfo(updateData.getProfileInfo());
+        existingResume.setContactInfo(updateData.getContactInfo());
+        existingResume.setWorkExperienceInfo(updateData.getWorkExperienceInfo());
+        existingResume.setEducationInfo(updateData.getEducationInfo());
+        existingResume.setSkillsInfo(updateData.getSkillsInfo());
+        existingResume.setProjectInfo(updateData.getProjectInfo());
+        existingResume.setCertificateInfo(updateData.getCertificateInfo());
+        existingResume.setLanguageInfo(updateData.getLanguageInfo());
+        existingResume.setInterests(updateData.getInterests());
+
+
+        resumeRepository.save(existingResume);
+        return existingResume;
+    }
 }
