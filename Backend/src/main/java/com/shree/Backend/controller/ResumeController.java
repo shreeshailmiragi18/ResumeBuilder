@@ -26,32 +26,32 @@ public class ResumeController {
 
     @PostMapping
     public ResponseEntity<?> createResume(@Valid @RequestBody CreateResumeRequest request, Authentication authentication) {
-        Resume newResume = resumeService.createResume(request, authentication);
+        Resume newResume = resumeService.createResume(request, authentication.getPrincipal());
         return ResponseEntity.status(HttpStatus.CREATED).body(newResume);
     }
 
     @GetMapping
     public ResponseEntity<?> getUserResume(){
-
+       return null;
     }
 
     @GetMapping(ID)
     public ResponseEntity<?> getResumeById(@PathVariable String id){
-
+        return null;
     }
 
     @PutMapping(ID)
     public ResponseEntity<?> updateResume(@PathVariable String id, @RequestBody Resume updateData){
-
+       return null;
     }
 
     @PutMapping(UPLOAD_IMAGES)
     public ResponseEntity<?> uploadResumeImages(@PathVariable String id, @RequestPart(value = "thumbnail",required = true) MultipartFile thumbnail, @RequestPart(value = "profileImage", required = false)MultipartFile profileImage, HttpServletRequest request){
-
+          return null;
     }
 
     @DeleteMapping(ID)
     public ResponseEntity<?> deleteResume(@PathVariable String id){
-
+         return null;
     }
 }
