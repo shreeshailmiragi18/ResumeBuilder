@@ -2,6 +2,7 @@ package com.shree.Backend.controller;
 
 import com.shree.Backend.documents.Resume;
 import com.shree.Backend.dto.CreateResumeRequest;
+import com.shree.Backend.service.FileUploadService;
 import com.shree.Backend.service.ResumeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -13,7 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static com.shree.Backend.util.AppConstants.ID;
 import static com.shree.Backend.util.AppConstants.UPLOAD_IMAGES;
@@ -25,6 +28,7 @@ import static com.shree.Backend.util.AppConstants.UPLOAD_IMAGES;
 public class ResumeController {
 
     private final ResumeService resumeService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping
     public ResponseEntity<?> createResume(@Valid @RequestBody CreateResumeRequest request, Authentication authentication) {
@@ -51,8 +55,9 @@ public class ResumeController {
     }
 
     @PutMapping(UPLOAD_IMAGES)
-    public ResponseEntity<?> uploadResumeImages(@PathVariable String id, @RequestPart(value = "thumbnail",required = true) MultipartFile thumbnail, @RequestPart(value = "profileImage", required = false)MultipartFile profileImage, HttpServletRequest request){
-          return null;
+    public ResponseEntity<?> uploadResumeImages(@PathVariable String id, @RequestPart(value = "thumbnail",required = false) MultipartFile thumbnail, @RequestPart(value = "profileImage", required = false)MultipartFile profileImage, Authentication authentication) throws IOException {
+        Map<String, String> response =   fileUploadService.uploadResumeImage(id, authentication.getPrincipal(), thumbnail,profileImage );
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(ID)
