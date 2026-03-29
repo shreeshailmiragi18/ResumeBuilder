@@ -52,4 +52,11 @@ public class ResumeService {
         List<Resume> resumes = resumeRepository.findByUserIdOrderByUpdatedAtDesc(response.getId());
         return resumes;
     }
+
+    public Resume getResumeById(String resumeId, Object principal) {
+        AuthResponse response = authService.getProfile(principal);
+        Resume existingResume = resumeRepository.findByUserIdAndId(response.getId(), resumeId)
+                .orElseThrow(()-> new RuntimeException("Resume not found"));
+        return existingResume;
+    }
 }

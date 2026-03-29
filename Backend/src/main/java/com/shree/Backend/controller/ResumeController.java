@@ -39,8 +39,9 @@ public class ResumeController {
     }
 
     @GetMapping(ID)
-    public ResponseEntity<?> getResumeById(@PathVariable String id){
-        return null;
+    public ResponseEntity<?> getResumeById(@PathVariable String id, Authentication authentication) {
+        Resume existingResume = resumeService.getResumeById(id, authentication.getPrincipal());
+        return ResponseEntity.ok(existingResume);
     }
 
     @PutMapping(ID)
