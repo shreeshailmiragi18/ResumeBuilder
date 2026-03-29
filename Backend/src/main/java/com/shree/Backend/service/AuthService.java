@@ -165,7 +165,6 @@ public class AuthService {
         String getUserId = (String)principalObject;
         User getUser = userRepository.findById(getUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        System.out.println("inside get profile");
         return AuthResponse.builder()
                 .id(getUser.getId())
                 .name(getUser.getName())
