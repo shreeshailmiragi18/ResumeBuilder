@@ -8,10 +8,12 @@ import com.shree.Backend.repository.ResumeRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +45,11 @@ public class ResumeService {
         newResume.setCertificateInfo(new ArrayList<>());
         newResume.setLanguageInfo(new ArrayList<>());
         newResume.setInterests(new ArrayList<>());
+    }
+
+    public List<Resume> getUserResumes( Object principal) {
+        AuthResponse response = authService.getProfile(principal);
+        List<Resume> resumes = resumeRepository.findByUserIdOrderByUpdatedAtDesc(response.getId());
+        return resumes;
     }
 }

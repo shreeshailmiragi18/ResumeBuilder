@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 import static com.shree.Backend.util.AppConstants.ID;
 import static com.shree.Backend.util.AppConstants.UPLOAD_IMAGES;
 
@@ -31,8 +33,9 @@ public class ResumeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getUserResume(){
-       return null;
+    public ResponseEntity<?> getUserResume(Authentication authentication) {
+        List<Resume> resumes = resumeService.getUserResumes(authentication.getPrincipal());
+        return ResponseEntity.ok(resumes);
     }
 
     @GetMapping(ID)
