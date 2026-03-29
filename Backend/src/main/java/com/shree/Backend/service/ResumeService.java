@@ -8,6 +8,7 @@ import com.shree.Backend.repository.ResumeRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -78,5 +79,12 @@ public class ResumeService {
 
         resumeRepository.save(existingResume);
         return existingResume;
+    }
+
+    public void deleteResume(String id, Object principal) {
+        AuthResponse response = authService.getProfile(principal);
+        Resume existingResume = resumeRepository.findByUserIdAndId(response.getId(), id)
+                .orElseThrow(()-> new RuntimeException("Resume not found"));
+        resumeRepository.delete(existingResume);
     }
 }
