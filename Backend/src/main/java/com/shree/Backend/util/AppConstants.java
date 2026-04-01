@@ -16,4 +16,12 @@ public class AppConstants {
     public static final String UPLOAD_IMAGES = "/{id}/upload-images";
 
 
+    //Payment related endpoints
+
+    public static final String CREATE_ORDER = "/create-order";
+    public static final String VERIFY = "/verify";
+    public static final String HISTORY = "/history";
+    public static final String GET_ORDER= "/order/{orderId}";
+
+
 }
