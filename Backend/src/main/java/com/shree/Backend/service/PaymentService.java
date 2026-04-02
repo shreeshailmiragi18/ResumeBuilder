@@ -100,5 +100,12 @@ public class PaymentService {
 
     }
 
+    public List<Payment> getUserPayments( Object principal) {
+        AuthResponse authResponse = authService.getProfile(principal);
+
+        return paymentRepository.findByUserIdOrderByCreatedAtDesc(authResponse.getId());
+
+    }
+
 
 }
