@@ -107,5 +107,10 @@ public class PaymentService {
 
     }
 
+    public Payment getPaymentDetails(String orderId) {
+        return paymentRepository.findByRazorpayOrderId(orderId)
+                .orElseThrow(()-> new RuntimeException("Payment not found"));
+    }
+
 
 }
