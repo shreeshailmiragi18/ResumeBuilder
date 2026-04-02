@@ -64,4 +64,11 @@ public class PaymentController {
         return ResponseEntity.ok(payments);
     }
 
+
+    @GetMapping(GET_ORDER)
+    public ResponseEntity<?> getOrderDetails(@PathVariable String orderId){
+        Payment paymentDetails = paymentService.getPaymentDetails(orderId);
+        return ResponseEntity.ok(paymentDetails);
+    }
+
 }
