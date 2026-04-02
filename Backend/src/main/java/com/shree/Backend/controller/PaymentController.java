@@ -58,4 +58,10 @@ public class PaymentController {
         }
     }
 
+    @GetMapping(HISTORY)
+    public ResponseEntity<?> getPaymentHistory(Authentication authentication){
+        List<Payment> payments = paymentService.getUserPayments(authentication.getPrincipal());
+        return ResponseEntity.ok(payments);
+    }
+
 }
