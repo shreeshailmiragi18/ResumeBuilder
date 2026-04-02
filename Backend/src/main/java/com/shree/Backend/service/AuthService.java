@@ -132,6 +132,7 @@ public class AuthService {
 
         sendVerificationEmail(user);
     }
+
     public AuthResponse login(LoginRequest request){
         User existingUser = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RuntimeException("Invalid email"));
 
@@ -159,4 +160,21 @@ public class AuthService {
         response.setToken(token);
         return response;
     }
+
+    public AuthResponse getProfile(Object principalObject) {
+        String getUserId = (String)principalObject;
+        User getUser = userRepository.findById(getUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return AuthResponse.builder()
+                .id(getUser.getId())
+                .name(getUser.getName())
+                .email(getUser.getEmail())
+                .profileImageUrl(getUser.getProfileImageUrl())
+                .subscriptionPlan(getUser.getSubscriptionPlan())
+                .emailVerified(getUser.isEmailVerified())
+                .createdAt(getUser.getCreatedAt())
+                .updatedAt(getUser.getUpdatedAt())
+                .build();
+    }
+
 }
