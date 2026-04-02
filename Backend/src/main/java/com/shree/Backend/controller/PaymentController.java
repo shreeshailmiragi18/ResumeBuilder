@@ -11,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.shree.Backend.util.AppConstants.*;
 
@@ -37,17 +39,23 @@ public class PaymentController {
     }
 
     @PostMapping(VERIFY)
-    public ResponseEntity<?> verifyPayment(@RequestBody Map<String, String> request){
-        return ResponseEntity.ok(request);
+    public ResponseEntity<?> verifyPayment(@RequestBody Map<String, String> request) throws RazorpayException {
+        String razorpayOrderId = request.get("razorpay_order_id");
+        String razorpayPaymentId = request.get("razorpay_payment_id");
+        String razorpaySignature = request.get("razorpay_signature");
+
+        if(Objects.isNull(razorpayOrderId) || Objects.isNull(razorpayPaymentId) || Objects.isNull(razorpaySignature)){
+            return ResponseEntity.badRequest().body(Map.of("message","invalid parameter"));
+        }
+
+        boolean isValid = paymentService.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature);
+
+        if(isValid){
+            return ResponseEntity.ok(Map.of("message","payment verified successfully",
+            "status","success"));
+        }else{
+            return ResponseEntity.badRequest().body(Map.of("message","payment verification failed"));
+        }
     }
 
-    @GetMapping(HISTORY)
-    public ResponseEntity<?> getPaymentHistory(Authentication authentication){
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @GetMapping(GET_ORDER)
-    public ResponseEntity<?> getOrderDetails(@PathVariable String orderId){
-        return ResponseEntity.ok(orderId);
-    }
 }
