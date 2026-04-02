@@ -2,6 +2,7 @@ package com.shree.Backend.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,5 +28,16 @@ public class EmailService {
         helper.setSubject(subject);
         helper.setText(htmlContent, true);
         mailSender.send(mimeMessage);
+    }
+
+    public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachment, String fileName) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(fromEmail);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body, true);
+        helper.addAttachment(fileName, new ByteArrayDataSource(attachment, "application/octet-stream"));
+        mailSender.send(message);
     }
 }
